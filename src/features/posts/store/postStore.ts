@@ -36,8 +36,9 @@ export const usePostStore = create<PostState>((set, get) => ({
         ? await postServiceAxios.getPosts()
         : await postService.getPosts();
       set({ posts, loading: false });
-    } catch (error) {
-      set({ error: 'Failed to fetch posts', loading: false });
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch posts';
+      set({ error: errorMessage, loading: false });
     }
   },
 
@@ -58,8 +59,9 @@ export const usePostStore = create<PostState>((set, get) => ({
         selectedPost: { ...post, comments },
         loading: false,
       });
-    } catch (error) {
-      set({ error: 'Failed to fetch post details', loading: false });
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch post details';
+      set({ error: errorMessage, loading: false });
     }
   },
 
@@ -74,8 +76,9 @@ export const usePostStore = create<PostState>((set, get) => ({
         posts: [...state.posts, newPost],
         loading: false,
       }));
-    } catch (error) {
-      set({ error: 'Failed to create post', loading: false });
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create post';
+      set({ error: errorMessage, loading: false });
     }
   },
 
@@ -90,8 +93,9 @@ export const usePostStore = create<PostState>((set, get) => ({
         posts: state.posts.map((p) => (p.id === id ? updatedPost : p)),
         loading: false,
       }));
-    } catch (error) {
-      set({ error: 'Failed to update post', loading: false });
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to update post';
+      set({ error: errorMessage, loading: false });
     }
   },
 
@@ -108,8 +112,9 @@ export const usePostStore = create<PostState>((set, get) => ({
         posts: state.posts.filter((p) => p.id !== id),
         loading: false,
       }));
-    } catch (error) {
-      set({ error: 'Failed to delete post', loading: false });
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to delete post';
+      set({ error: errorMessage, loading: false });
     }
   },
 })); 

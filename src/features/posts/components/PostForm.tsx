@@ -15,9 +15,11 @@ export const PostForm = ({ post, onSuccess }: PostFormProps) => {
   const { createPost, updatePost, useAxios, setUseAxios } = usePostStore();
   const [title, setTitle] = useState(post?.title || '');
   const [body, setBody] = useState(post?.body || '');
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     try {
       if (post) {
         await updatePost(post.id, { title, body });
@@ -25,8 +27,10 @@ export const PostForm = ({ post, onSuccess }: PostFormProps) => {
         await createPost({ title, body, userId: 1 });
       }
       onSuccess?.();
-    } catch (error) {
-      console.error('Failed to save post:', error);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to save post';
+      setError(errorMessage);
+      console.error('Failed to save post:', errorMessage);
     }
   };
 
@@ -41,6 +45,10 @@ export const PostForm = ({ post, onSuccess }: PostFormProps) => {
           className="h-4 w-4"
         />
       </div>
+
+      {error && (
+        <div className="text-red-500 text-sm">{error}</div>
+      )}
 
       <div className="space-y-2">
         <label htmlFor="title" className="text-sm font-medium">
